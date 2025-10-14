@@ -1,0 +1,749 @@
+.dashboard {
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+/* Header */
+.dashboard-header {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.header-content h1 {
+  font-family: var(--font-primary);
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--cyber-primary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-shadow: 0 0 20px var(--cyber-primary);
+}
+
+.title-icon {
+  font-size: 2rem;
+  animation: dashboard-pulse 2s ease-in-out infinite;
+}
+
+@keyframes dashboard-pulse {
+  0%, 100% { 
+    transform: scale(1);
+    filter: drop-shadow(0 0 10px var(--cyber-primary));
+  }
+  50% { 
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 20px var(--cyber-primary));
+  }
+}
+
+.page-description {
+  font-size: 1.1rem;
+  color: var(--cyber-text-secondary);
+  max-width: 500px;
+}
+
+.user-profile {
+  display: flex;
+  gap: 1rem;
+}
+
+.profile-card {
+  background: rgba(17, 24, 39, 0.8);
+  border: 1px solid var(--cyber-surface);
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  min-width: 120px;
+  backdrop-filter: blur(10px);
+}
+
+.profile-avatar {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--cyber-primary), var(--cyber-secondary));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  margin: 0 auto 1rem;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+.profile-name {
+  font-family: var(--font-primary);
+  font-weight: bold;
+  color: var(--cyber-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.profile-level {
+  color: var(--cyber-warning);
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.level-badge {
+  background: rgba(251, 191, 36, 0.2);
+  border: 1px solid var(--cyber-warning);
+  border-radius: 12px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+/* Main Content */
+.dashboard-main {
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+/* Stats Overview */
+.stats-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  grid-column: 1 / -1;
+}
+
+.stat-card {
+  background: rgba(17, 24, 39, 0.8);
+  border: 1px solid var(--cyber-surface);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+  transition: left 0.8s ease;
+}
+
+.stat-card:hover::before {
+  left: 100%;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--cyber-primary);
+  box-shadow: 0 15px 40px rgba(0, 212, 255, 0.2);
+}
+
+.stat-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.stat-card.attacks .stat-icon {
+  color: var(--cyber-secondary);
+  text-shadow: 0 0 15px var(--cyber-secondary);
+}
+
+.stat-card.threats .stat-icon {
+  color: var(--cyber-danger);
+  text-shadow: 0 0 15px var(--cyber-danger);
+}
+
+.stat-card.modules .stat-icon {
+  color: var(--cyber-warning);
+  text-shadow: 0 0 15px var(--cyber-warning);
+}
+
+.stat-card.score .stat-icon {
+  color: var(--cyber-success);
+  text-shadow: 0 0 15px var(--cyber-success);
+}
+
+.stat-number {
+  font-family: var(--font-primary);
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--cyber-text-primary);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.stat-card.attacks .stat-number {
+  color: var(--cyber-secondary);
+  text-shadow: 0 0 10px var(--cyber-secondary);
+}
+
+.stat-card.threats .stat-number {
+  color: var(--cyber-danger);
+  text-shadow: 0 0 10px var(--cyber-danger);
+}
+
+.stat-card.modules .stat-number {
+  color: var(--cyber-warning);
+  text-shadow: 0 0 10px var(--cyber-warning);
+}
+
+.stat-card.score .stat-number {
+  color: var(--cyber-success);
+  text-shadow: 0 0 10px var(--cyber-success);
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--cyber-text-muted);
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+/* Activity Feed */
+.activity-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.activity-feed {
+  background: rgba(17, 24, 39, 0.8);
+  border: 1px solid var(--cyber-surface);
+  border-radius: 12px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.feed-header {
+  background: rgba(55, 65, 81, 0.5);
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--cyber-surface);
+  display: flex;
+  justify-content: between;
+  align-items: center;
+}
+
+.feed-title {
+  font-family: var(--font-primary);
+  font-size: 1.5rem;
+  color: var(--cyber-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.feed-content {
+  padding: 1.5rem 2rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.activity-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(55, 65, 81, 0.3);
+  border: 1px solid var(--cyber-surface);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.activity-item:hover {
+  transform: translateX(5px);
+  border-color: var(--cyber-primary);
+  background: rgba(0, 212, 255, 0.05);
+}
+
+.activity-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.activity-icon.attack {
+  background: rgba(255, 0, 110, 0.2);
+  color: var(--cyber-secondary);
+  border: 2px solid var(--cyber-secondary);
+}
+
+.activity-icon.threat {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--cyber-danger);
+  border: 2px solid var(--cyber-danger);
+}
+
+.activity-icon.learning {
+  background: rgba(251, 191, 36, 0.2);
+  color: var(--cyber-warning);
+  border: 2px solid var(--cyber-warning);
+}
+
+.activity-icon.achievement {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--cyber-success);
+  border: 2px solid var(--cyber-success);
+}
+
+.activity-details {
+  flex: 1;
+}
+
+.activity-title {
+  font-weight: bold;
+  color: var(--cyber-text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.activity-description {
+  font-size: 0.9rem;
+  color: var(--cyber-text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.activity-time {
+  font-size: 0.8rem;
+  color: var(--cyber-text-muted);
+  font-family: var(--font-secondary);
+}
+
+/* Progress Section */
+.progress-section {
+  background: rgba(17, 24, 39, 0.8);
+  border: 1px solid var(--cyber-surface);
+  border-radius: 12px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.progress-title {
+  font-family: var(--font-primary);
+  font-size: 1.5rem;
+  color: var(--cyber-warning);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.skill-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.skill-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.skill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.skill-name {
+  font-weight: bold;
+  color: var(--cyber-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.skill-icon {
+  font-size: 1.2rem;
+}
+
+.skill-icon.phishing {
+  color: var(--cyber-secondary);
+}
+
+.skill-icon.malware {
+  color: var(--cyber-danger);
+}
+
+.skill-icon.social {
+  color: var(--cyber-warning);
+}
+
+.skill-icon.network {
+  color: var(--cyber-primary);
+}
+
+.skill-level {
+  font-family: var(--font-primary);
+  font-weight: bold;
+  color: var(--cyber-warning);
+  font-size: 0.9rem;
+}
+
+.skill-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--cyber-bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--cyber-surface);
+}
+
+.skill-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.8s ease;
+  position: relative;
+}
+
+.skill-fill.phishing {
+  background: linear-gradient(90deg, var(--cyber-secondary), var(--cyber-primary));
+}
+
+.skill-fill.malware {
+  background: linear-gradient(90deg, var(--cyber-danger), var(--cyber-secondary));
+}
+
+.skill-fill.social {
+  background: linear-gradient(90deg, var(--cyber-warning), var(--cyber-primary));
+}
+
+.skill-fill.network {
+  background: linear-gradient(90deg, var(--cyber-primary), var(--cyber-accent));
+}
+
+.skill-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: progress-shine 2s linear infinite;
+}
+
+@keyframes progress-shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Achievements */
+.achievements-section {
+  background: rgba(17, 24, 39, 0.8);
+  border: 1px solid var(--cyber-surface);
+  border-radius: 12px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  margin-top: 1.5rem;
+}
+
+.achievements-title {
+  font-family: var(--font-primary);
+  font-size: 1.5rem;
+  color: var(--cyber-success);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.achievement-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background: rgba(55, 65, 81, 0.3);
+  border: 1px solid var(--cyber-surface);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.achievement-badge.unlocked {
+  border-color: var(--cyber-success);
+  background: rgba(16, 185, 129, 0.1);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+}
+
+.achievement-badge:hover {
+  transform: translateY(-3px);
+}
+
+.achievement-badge.unlocked:hover {
+  box-shadow: 0 5px 25px rgba(16, 185, 129, 0.3);
+}
+
+.achievement-icon {
+  font-size: 2rem;
+}
+
+.achievement-badge.unlocked .achievement-icon {
+  color: var(--cyber-success);
+  text-shadow: 0 0 10px var(--cyber-success);
+  animation: achievement-glow 2s ease-in-out infinite;
+}
+
+.achievement-badge:not(.unlocked) .achievement-icon {
+  color: var(--cyber-text-muted);
+  opacity: 0.5;
+}
+
+@keyframes achievement-glow {
+  0%, 100% { text-shadow: 0 0 10px var(--cyber-success); }
+  50% { text-shadow: 0 0 20px var(--cyber-success); }
+}
+
+.achievement-name {
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.achievement-badge.unlocked .achievement-name {
+  color: var(--cyber-text-primary);
+}
+
+.achievement-badge:not(.unlocked) .achievement-name {
+  color: var(--cyber-text-muted);
+}
+
+/* Quick Actions */
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+  grid-column: 1 / -1;
+}
+
+.action-card {
+  background: rgba(17, 24, 39, 0.8);
+  border: 1px solid var(--cyber-surface);
+  border-radius: 8px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  text-align: center;
+}
+
+.action-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--cyber-primary);
+  box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+}
+
+.action-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.action-card.simulator .action-icon {
+  color: var(--cyber-secondary);
+}
+
+.action-card.detector .action-icon {
+  color: var(--cyber-danger);
+}
+
+.action-card.learning .action-icon {
+  color: var(--cyber-warning);
+}
+
+.action-title {
+  font-family: var(--font-primary);
+  font-weight: bold;
+  color: var(--cyber-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.action-description {
+  font-size: 0.9rem;
+  color: var(--cyber-text-secondary);
+}
+
+/* Empty States */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--cyber-text-secondary);
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.empty-message {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.empty-description {
+  font-size: 0.9rem;
+  color: var(--cyber-text-muted);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .user-profile {
+    justify-content: center;
+  }
+
+  .dashboard-main {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .progress-section {
+    order: -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 1rem 0;
+  }
+
+  .dashboard-header,
+  .dashboard-main {
+    padding: 0 1rem;
+  }
+
+  .header-content h1 {
+    font-size: 2rem;
+  }
+
+  .user-profile {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .profile-card {
+    width: 100%;
+  }
+
+  .stats-overview {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  .stat-card {
+    padding: 1.5rem;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+  }
+
+  .feed-content {
+    max-height: 300px;
+  }
+
+  .activity-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+
+  .activity-icon {
+    align-self: center;
+  }
+
+  .achievements-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  }
+
+  .achievement-badge {
+    padding: 1rem;
+  }
+
+  .achievement-icon {
+    font-size: 1.5rem;
+  }
+
+  .quick-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-content h1 {
+    font-size: 1.8rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .stats-overview {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .stat-icon {
+    font-size: 2rem;
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
+  }
+
+  .feed-title,
+  .progress-title,
+  .achievements-title {
+    font-size: 1.3rem;
+    justify-content: center;
+  }
+
+  .progress-section,
+  .achievements-section {
+    padding: 1.5rem;
+  }
+
+  .skill-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+}

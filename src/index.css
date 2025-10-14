@@ -1,0 +1,184 @@
+/* Custom Cybersec Color Palette - Unique to avoid typical AI colors */
+:root {
+  /* Primary Cyber Colors - Deep Tech Vibes */
+  --cyber-primary: #00d4ff;        /* Electric Ice Blue */
+  --cyber-secondary: #ff006e;      /* Neon Magenta */
+  --cyber-accent: #8b5cf6;         /* Deep Violet */
+  --cyber-warning: #fbbf24;        /* Amber Alert */
+  --cyber-danger: #ef4444;         /* Critical Red */
+  --cyber-success: #10b981;        /* Secure Green */
+  
+  /* Dark Theme Variations */
+  --cyber-bg-primary: #0a0b0f;     /* Deep Space Black */
+  --cyber-bg-secondary: #111827;   /* Darker Gray */
+  --cyber-bg-tertiary: #1f2937;    /* Medium Dark */
+  --cyber-surface: #374151;        /* Surface Gray */
+  
+  /* Text Colors */
+  --cyber-text-primary: #f3f4f6;   /* Bright White */
+  --cyber-text-secondary: #d1d5db; /* Light Gray */
+  --cyber-text-muted: #9ca3af;     /* Muted Gray */
+  
+  /* Special Effects */
+  --cyber-glow: 0 0 20px currentColor;
+  --cyber-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+  
+  /* Hacker Fonts */
+  --font-primary: 'Orbitron', monospace;
+  --font-code: 'Share Tech Mono', monospace;
+  --font-body: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--cyber-bg-primary);
+  color: var(--cyber-text-primary);
+  overflow-x: hidden;
+  min-height: 100vh;
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 400;
+  letter-spacing: 0.025em;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cyber-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--cyber-primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cyber-secondary);
+}
+
+/* Selection Styling */
+::selection {
+  background: var(--cyber-primary);
+  color: var(--cyber-bg-primary);
+}
+
+/* Base Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-primary);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+code, pre {
+  font-family: var(--font-code);
+}
+
+/* Button Base Styles */
+button {
+  font-family: var(--font-primary);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Input Base Styles */
+input, textarea, select {
+  font-family: var(--font-code);
+  background: var(--cyber-bg-secondary);
+  border: 1px solid var(--cyber-surface);
+  color: var(--cyber-text-primary);
+  padding: 0.75rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--cyber-primary);
+  box-shadow: var(--cyber-shadow);
+}
+
+/* Utility Classes */
+.text-cyber-primary { color: var(--cyber-primary); }
+.text-cyber-secondary { color: var(--cyber-secondary); }
+.text-cyber-accent { color: var(--cyber-accent); }
+.text-cyber-warning { color: var(--cyber-warning); }
+.text-cyber-danger { color: var(--cyber-danger); }
+.text-cyber-success { color: var(--cyber-success); }
+
+.bg-cyber-primary { background-color: var(--cyber-primary); }
+.bg-cyber-secondary { background-color: var(--cyber-secondary); }
+.bg-cyber-surface { background-color: var(--cyber-surface); }
+
+.font-code { font-family: var(--font-code); }
+.font-primary { font-family: var(--font-primary); }
+.font-body { font-family: var(--font-body); }
+
+/* Enhanced body text readability */
+p, li, span:not(.font-code):not(.font-primary), div:not(.font-code):not(.font-primary) {
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* Cyber Glow Effects */
+.cyber-glow {
+  text-shadow: var(--cyber-glow);
+}
+
+.cyber-border {
+  border: 1px solid var(--cyber-primary);
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+}
+
+/* Loading Animation */
+@keyframes cyber-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.cyber-pulse {
+  animation: cyber-pulse 2s ease-in-out infinite;
+}
+
+/* Glitch Effect */
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+.glitch-effect {
+  animation: glitch 0.3s ease-in-out infinite alternate;
+}
+
+/* Matrix-style text effects */
+@keyframes matrix-rain {
+  0% { transform: translateY(-100vh); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+.matrix-text {
+  animation: matrix-rain 4s linear infinite;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  :root {
+    font-size: 14px;
+  }
+}

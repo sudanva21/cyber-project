@@ -1,0 +1,219 @@
+.background-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+  opacity: 0.6; /* Reduce overall brightness */
+}
+
+.three-container {
+  width: 100%;
+  height: 100%;
+}
+
+.three-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Hacker Terminal Scan Line Effect */
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    #00ff41 20%,
+    #00d4ff 50%, 
+    #ff006e 80%,
+    transparent 100%
+  );
+  animation: scan-line-move 4s linear infinite;
+  opacity: 0.9;
+  box-shadow: 
+    0 0 10px #00ff41,
+    0 0 20px #00d4ff,
+    0 0 30px rgba(0, 212, 255, 0.3);
+}
+
+@keyframes scan-line-move {
+  0% { 
+    transform: translateY(-10px); 
+    opacity: 0;
+    filter: brightness(2);
+  }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { 
+    transform: translateY(calc(100vh + 10px)); 
+    opacity: 0;
+    filter: brightness(0.5);
+  }
+}
+
+/* Matrix-style Digital Grid */
+.grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 255, 0.02) 1px, transparent 1px);
+  background-size: 30px 30px;
+  animation: grid-glitch 6s ease-in-out infinite;
+}
+
+@keyframes grid-glitch {
+  0%, 100% { 
+    opacity: 0.2;
+    transform: translate(0, 0);
+  }
+  20% { 
+    opacity: 0.4;
+    transform: translate(1px, 0);
+  }
+  40% { 
+    opacity: 0.1;
+    transform: translate(-1px, 1px);
+  }
+  60% { 
+    opacity: 0.3;
+    transform: translate(0, -1px);
+  }
+  80% { 
+    opacity: 0.15;
+    transform: translate(1px, 1px);
+  }
+}
+
+/* Cyberpunk Ambient Lighting - Reduced brightness */
+.noise-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 15% 25%, rgba(0, 255, 65, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 85% 75%, rgba(255, 0, 110, 0.03) 0%, transparent 45%),
+    radial-gradient(circle at 50% 10%, rgba(0, 212, 255, 0.02) 0%, transparent 60%),
+    radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.025) 0%, transparent 50%);
+  animation: cyber-ambient 12s ease-in-out infinite;
+}
+
+@keyframes cyber-ambient {
+  0%, 100% { 
+    background-position: 15% 25%, 85% 75%, 50% 10%, 20% 80%;
+    opacity: 0.8;
+    filter: blur(0px);
+  }
+  25% { 
+    background-position: 25% 35%, 75% 65%, 60% 20%, 30% 70%;
+    opacity: 1;
+    filter: blur(1px);
+  }
+  50% { 
+    background-position: 35% 15%, 65% 85%, 40% 30%, 40% 60%;
+    opacity: 0.9;
+    filter: blur(0px);
+  }
+  75% { 
+    background-position: 45% 45%, 55% 55%, 30% 40%, 50% 90%;
+    opacity: 0.7;
+    filter: blur(2px);
+  }
+}
+
+/* Additional Hacker Effects */
+.background-animation::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 255, 65, 0.01) 2px,
+      rgba(0, 255, 65, 0.01) 4px
+    );
+  animation: scanlines 0.1s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes scanlines {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(4px); }
+}
+
+/* Glitch Effect for Enhanced Cyberpunk Feel */
+.background-animation::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 0, 110, 0.02) 30%,
+    transparent 50%,
+    rgba(0, 212, 255, 0.02) 70%,
+    transparent 100%
+  );
+  animation: data-stream 8s linear infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes data-stream {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Performance optimizations for mobile */
+@media (max-width: 768px) {
+  .background-animation {
+    transform: scale(0.8);
+    opacity: 0.7;
+  }
+  
+  .scan-line {
+    height: 1px;
+    animation-duration: 4s;
+  }
+  
+  .grid-overlay {
+    background-size: 40px 40px;
+    opacity: 0.2;
+  }
+  
+  .noise-overlay {
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 480px) {
+  .background-animation {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+  
+  .grid-overlay {
+    background-size: 30px 30px;
+    opacity: 0.15;
+  }
+}
