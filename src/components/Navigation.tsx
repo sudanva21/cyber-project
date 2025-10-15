@@ -106,7 +106,6 @@ const Navigation: React.FC<NavigationProps> = ({ audioManager, onAuthClick, user
                   onAuthClick()
                 }}
               >
-                <span className="auth-icon">🔐</span>
                 <span className="auth-text font-code">ACCESS</span>
               </button>
             )}

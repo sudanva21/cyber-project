@@ -160,16 +160,17 @@
 .auth-btn {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1.2rem;
+  justify-content: center;
+  padding: 0.9rem 1.5rem;
   background: linear-gradient(135deg, var(--cyber-primary), var(--cyber-secondary));
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   color: var(--cyber-bg-primary);
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+  line-height: 1;
 }
 
 .auth-btn:hover {
@@ -182,12 +183,13 @@
 }
 
 .auth-icon {
-  font-size: 1rem;
+  font-size: 0.85rem;
 }
 
 .auth-text {
-  font-size: 0.8rem;
-  letter-spacing: 0.8px;
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+  line-height: 1;
 }
 
 .user-info {
@@ -322,12 +324,13 @@
 
 @media (max-width: 1100px) {
   .auth-btn {
-    padding: 0.55rem 1.1rem;
-    font-size: 0.78rem;
+    padding: 0.25rem 0.55rem;
+    font-size: 0.65rem;
   }
   
   .auth-text {
-    font-size: 0.78rem;
+    font-size: 0.65rem;
+    line-height: 1;
   }
 }
 
@@ -361,13 +364,14 @@
   }
   
   .auth-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.6rem;
   }
   
   .auth-text {
-    font-size: 0.75rem;
-    letter-spacing: 0.6px;
+    font-size: 0.6rem;
+    letter-spacing: 0.4px;
+    line-height: 1;
   }
   
   .status-items {
@@ -418,13 +422,14 @@
 
   
   .auth-btn, .logout-btn {
-    padding: 0.45rem 0.9rem;
-    font-size: 0.7rem;
+    padding: 0.15rem 0.4rem;
+    font-size: 0.55rem;
   }
   
   .auth-text, .logout-text {
-    font-size: 0.65rem;
-    letter-spacing: 0.5px;
+    font-size: 0.55rem;
+    letter-spacing: 0.3px;
+    line-height: 1;
   }
   
   .user-status {
@@ -478,13 +483,14 @@
   }
   
   .auth-btn, .logout-btn {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.65rem;
+    padding: 0.1rem 0.35rem;
+    font-size: 0.5rem;
   }
   
   .auth-text, .logout-text {
-    font-size: 0.6rem;
-    letter-spacing: 0.4px;
+    font-size: 0.5rem;
+    letter-spacing: 0.2px;
+    line-height: 1;
   }
 
   .system-time {

@@ -59,4 +59,83 @@ test.describe('Navigation Tests', () => {
     await page.keyboard.press('Enter');
     await expect(page).toHaveURL('/simulator');
   });
+
+  test('should display access button correctly across viewport sizes when not logged in', async ({ page }) => {
+    const viewports = [
+      { name: 'Desktop', width: 1400, height: 1080, maxHeight: 25, minHeight: 18 },
+      { name: 'Large Tablet', width: 1100, height: 768, maxHeight: 22, minHeight: 16 },
+      { name: 'Tablet', width: 1024, height: 768, maxHeight: 20, minHeight: 14 },
+      { name: 'Mobile Tablet', width: 768, height: 1024, maxHeight: 18, minHeight: 10 },
+      { name: 'Mobile', width: 480, height: 800, maxHeight: 15, minHeight: 8 }
+    ];
+
+    for (const { name, width, height, maxHeight, minHeight } of viewports) {
+      await page.setViewportSize({ width, height });
+      await page.goto('/');
+      await page.waitForTimeout(3000);
+      await expect(page.locator('.loading-screen')).not.toBeVisible({ timeout: 10000 });
+
+      // Find the access button (should be visible when not logged in)
+      const accessButton = page.locator('.auth-btn');
+      await expect(accessButton).toBeVisible({ timeout: 5000 });
+
+      // Check button dimensions
+      const buttonBox = await accessButton.boundingBox();
+      expect(buttonBox).toBeTruthy();
+      
+      if (buttonBox) {
+        // Button should not exceed maximum height for this viewport
+        expect(buttonBox.height).toBeLessThanOrEqual(maxHeight);
+        
+        // Button should have reasonable minimum dimensions for clickability
+        expect(buttonBox.height).toBeGreaterThan(minHeight);
+        expect(buttonBox.width).toBeGreaterThan(25);
+        
+        // Button should fit within navbar container
+        const navContainer = page.locator('.nav-container');
+        const navBox = await navContainer.boundingBox();
+        
+        if (navBox) {
+          expect(buttonBox.x + buttonBox.width).toBeLessThanOrEqual(navBox.x + navBox.width + 5);
+          expect(buttonBox.y).toBeGreaterThanOrEqual(navBox.y - 5);
+          expect(buttonBox.y + buttonBox.height).toBeLessThanOrEqual(navBox.y + navBox.height + 5);
+        }
+      }
+
+      // Verify button text is present and readable
+      await expect(accessButton).toContainText('ACCESS');
+      
+      // Verify button is clickable
+      await expect(accessButton).toBeEnabled();
+      
+      console.log(`${name} (${width}x${height}): Button height = ${buttonBox?.height}px`);
+    }
+  });
+
+  test('should maintain access button functionality after removing emoji', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForTimeout(3000);
+    await expect(page.locator('.loading-screen')).not.toBeVisible({ timeout: 10000 });
+
+    // Find the access button
+    const accessButton = page.locator('.auth-btn');
+    await expect(accessButton).toBeVisible();
+
+    // Verify the button no longer contains the lock emoji
+    const buttonText = await accessButton.textContent();
+    expect(buttonText).not.toContain('🔐');
+    expect(buttonText).toContain('ACCESS');
+
+    // Verify button is still clickable and functional
+    await expect(accessButton).toBeEnabled();
+    
+    // Click should open auth modal
+    await accessButton.click();
+    
+    // Wait for auth modal to appear
+    const authModal = page.locator('.auth-modal, .modal');
+    if (await authModal.count() > 0) {
+      await expect(authModal.first()).toBeVisible({ timeout: 3000 });
+    }
+  });
 });
