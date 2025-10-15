@@ -5,6 +5,7 @@ import BackgroundAnimation from './components/BackgroundAnimation'
 import MainContent from './components/MainContent'
 import AudioManager from './utils/AudioManager'
 import { SupabaseProvider } from './providers/SupabaseProvider'
+import './utils/BackendTest' // Load backend testing utilities
 
 function App() {
   const [loading, setLoading] = useState(true)
