@@ -1,7 +1,7 @@
 {
-  "name": "cybersec-hacker-portal",
+  "name": "nexus-cyber-shield",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
@@ -16,15 +16,19 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.38.4",
     "@types/three": "^0.158.3",
-    "framer-motion": "^10.16.16",
+    "framer-motion": "^11.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.1",
     "three": "^0.158.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "d3": "^7.8.5",
+    "@react-three/fiber": "^8.15.12",
+    "@react-three/drei": "^9.92.7"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.1",
+    "@types/d3": "^7.4.3",
     "@types/node": "^20.10.4",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",

@@ -1,496 +1,448 @@
-export default class AudioManager {
+class AudioManager {
   private audioContext: AudioContext | null = null
-  private sounds: Map<string, AudioBuffer> = new Map()
+  private masterGain: GainNode | null = null
   private isInitialized = false
+  private volume = 0.5
+  private isMuted = false
+  private oscillators: Map<string, OscillatorNode> = new Map()
+  private audioBuffers: Map<string, AudioBuffer> = new Map()
+  private currentTheme: 'quantum' | 'neural' | 'holographic' = 'quantum'
 
-  async initialize() {
-    if (this.isInitialized) return
+  constructor() {
+    this.initializeContext()
+  }
 
+  async initializeContext() {
     try {
-      // Create audio context
       this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
-      
-      // Generate cyber sounds programmatically
-      await this.generateSounds()
+      this.masterGain = this.audioContext.createGain()
+      this.masterGain.connect(this.audioContext.destination)
+      this.updateVolume()
       this.isInitialized = true
     } catch (error) {
-      console.warn('Audio initialization failed:', error)
+      console.warn('Audio context initialization failed:', error)
     }
   }
 
-  private async generateSounds() {
+  async initializeQuantumAudio(): Promise<void> {
+    try {
+      if (!this.isInitialized) {
+        await this.initializeContext()
+      }
+      
+      // Resume context if needed (browser security requirements)
+      if (this.audioContext?.state === 'suspended') {
+        // Note: This will fail without user interaction, which is expected
+        await this.audioContext.resume().catch(err => {
+          console.warn('AudioContext resume requires user interaction:', err.message)
+        })
+      }
+
+      // Preload ambient sounds (only if context is running)
+      if (this.audioContext?.state === 'running') {
+        this.generateAmbientSounds()
+      }
+    } catch (error) {
+      console.warn('Quantum audio initialization failed:', error)
+      throw error
+    }
+  }
+
+  setTheme(theme: 'quantum' | 'neural' | 'holographic') {
+    this.currentTheme = theme
+  }
+
+  setVolume(volume: number) {
+    this.volume = Math.max(0, Math.min(1, volume))
+    this.updateVolume()
+  }
+
+  toggleMute() {
+    this.isMuted = !this.isMuted
+    this.updateVolume()
+  }
+
+  private updateVolume() {
+    if (this.masterGain) {
+      this.masterGain.gain.value = this.isMuted ? 0 : this.volume
+    }
+  }
+
+  // System Sounds
+  playSystemOnline() {
+    this.playFrequencySequence([
+      { freq: 200, duration: 0.1 },
+      { freq: 400, duration: 0.1 },
+      { freq: 600, duration: 0.1 },
+      { freq: 800, duration: 0.2, volume: 0.3 }
+    ])
+  }
+
+  playSystemStartup() {
+    this.playFrequencySequence([
+      { freq: 100, duration: 0.3 },
+      { freq: 200, duration: 0.2 },
+      { freq: 400, duration: 0.2 },
+      { freq: 800, duration: 0.3 },
+      { freq: 1200, duration: 0.4, volume: 0.2 }
+    ])
+  }
+
+  playSystemNotification() {
+    this.playFrequencySequence([
+      { freq: 800, duration: 0.1, volume: 0.3 },
+      { freq: 1200, duration: 0.15, volume: 0.2 }
+    ])
+  }
+
+  playBiometricSuccess() {
+    this.playFrequencySequence([
+      { freq: 400, duration: 0.1 },
+      { freq: 600, duration: 0.1 },
+      { freq: 800, duration: 0.1 },
+      { freq: 1000, duration: 0.2, volume: 0.25 }
+    ])
+  }
+
+  playThemeChange() {
+    const themeFrequencies = {
+      quantum: [400, 600, 800],
+      neural: [300, 500, 700, 900],
+      holographic: [200, 400, 600, 800, 1000]
+    }
+
+    const frequencies = themeFrequencies[this.currentTheme]
+    this.playFrequencySequence(
+      frequencies.map(freq => ({ freq, duration: 0.08, volume: 0.15 }))
+    )
+  }
+
+  // Interactive Sounds
+  playClick() {
+    this.playTone(800, 0.05, 'square', 0.1)
+  }
+
+  playHover() {
+    this.playTone(600, 0.03, 'sine', 0.05)
+  }
+
+  playKeyPress() {
+    this.playTone(400, 0.02, 'square', 0.08)
+  }
+
+  playError() {
+    this.playFrequencySequence([
+      { freq: 200, duration: 0.2, volume: 0.3 },
+      { freq: 150, duration: 0.3, volume: 0.25 }
+    ])
+  }
+
+  playSuccess() {
+    this.playFrequencySequence([
+      { freq: 600, duration: 0.1, volume: 0.2 },
+      { freq: 800, duration: 0.1, volume: 0.2 },
+      { freq: 1000, duration: 0.2, volume: 0.15 }
+    ])
+  }
+
+  playWarning() {
+    this.playFrequencySequence([
+      { freq: 500, duration: 0.15, volume: 0.25 },
+      { freq: 400, duration: 0.15, volume: 0.25 },
+      { freq: 500, duration: 0.15, volume: 0.25 }
+    ])
+  }
+
+  // Threat Detection Sounds
+  playThreatDetected() {
+    this.playFrequencySequence([
+      { freq: 1000, duration: 0.1, volume: 0.3 },
+      { freq: 800, duration: 0.1, volume: 0.3 },
+      { freq: 1000, duration: 0.1, volume: 0.3 }
+    ])
+  }
+
+  playScanComplete() {
+    this.playFrequencySequence([
+      { freq: 300, duration: 0.1 },
+      { freq: 400, duration: 0.1 },
+      { freq: 500, duration: 0.1 },
+      { freq: 600, duration: 0.2, volume: 0.2 }
+    ])
+  }
+
+  playAlert(severity: 'low' | 'medium' | 'high' | 'critical') {
+    const alertPatterns = {
+      low: [{ freq: 400, duration: 0.2, volume: 0.15 }],
+      medium: [
+        { freq: 500, duration: 0.1, volume: 0.2 },
+        { freq: 600, duration: 0.1, volume: 0.2 }
+      ],
+      high: [
+        { freq: 700, duration: 0.1, volume: 0.25 },
+        { freq: 800, duration: 0.1, volume: 0.25 },
+        { freq: 700, duration: 0.1, volume: 0.25 }
+      ],
+      critical: [
+        { freq: 1000, duration: 0.05, volume: 0.35 },
+        { freq: 900, duration: 0.05, volume: 0.35 },
+        { freq: 1000, duration: 0.05, volume: 0.35 },
+        { freq: 900, duration: 0.05, volume: 0.35 },
+        { freq: 1000, duration: 0.1, volume: 0.35 }
+      ]
+    }
+
+    this.playFrequencySequence(alertPatterns[severity])
+  }
+
+  // Training & Simulation Sounds
+  playTrainingStart() {
+    this.playFrequencySequence([
+      { freq: 250, duration: 0.2 },
+      { freq: 350, duration: 0.2 },
+      { freq: 450, duration: 0.3, volume: 0.2 }
+    ])
+  }
+
+  playSimulationComplete() {
+    this.playFrequencySequence([
+      { freq: 400, duration: 0.1 },
+      { freq: 500, duration: 0.1 },
+      { freq: 600, duration: 0.1 },
+      { freq: 700, duration: 0.1 },
+      { freq: 800, duration: 0.3, volume: 0.2 }
+    ])
+  }
+
+  playAchievementUnlocked() {
+    this.playFrequencySequence([
+      { freq: 523, duration: 0.1 }, // C
+      { freq: 659, duration: 0.1 }, // E
+      { freq: 784, duration: 0.1 }, // G
+      { freq: 1047, duration: 0.3, volume: 0.2 } // C octave
+    ])
+  }
+
+  // Ambient Sounds
+  generateAmbientSounds() {
+    this.startAmbientHum()
+  }
+
+  startAmbientHum() {
+    if (!this.audioContext || this.oscillators.has('ambient')) return
+
+    const oscillator = this.audioContext.createOscillator()
+    const gainNode = this.audioContext.createGain()
+    
+    oscillator.type = 'sawtooth'
+    oscillator.frequency.setValueAtTime(60, this.audioContext.currentTime)
+    
+    gainNode.gain.setValueAtTime(0.02, this.audioContext.currentTime)
+    
+    oscillator.connect(gainNode)
+    gainNode.connect(this.masterGain!)
+    
+    oscillator.start()
+    this.oscillators.set('ambient', oscillator)
+
+    // Add subtle frequency modulation
+    const lfo = this.audioContext.createOscillator()
+    const lfoGain = this.audioContext.createGain()
+    
+    lfo.type = 'sine'
+    lfo.frequency.setValueAtTime(0.1, this.audioContext.currentTime)
+    lfoGain.gain.setValueAtTime(5, this.audioContext.currentTime)
+    
+    lfo.connect(lfoGain)
+    lfoGain.connect(oscillator.frequency)
+    lfo.start()
+  }
+
+  stopAmbientSounds() {
+    const ambient = this.oscillators.get('ambient')
+    if (ambient) {
+      ambient.stop()
+      this.oscillators.delete('ambient')
+    }
+  }
+
+  // Core Audio Methods
+  private playTone(
+    frequency: number, 
+    duration: number, 
+    type: OscillatorType = 'sine', 
+    volume: number = 0.1
+  ) {
+    if (!this.audioContext || !this.masterGain) return
+
+    const oscillator = this.audioContext.createOscillator()
+    const gainNode = this.audioContext.createGain()
+    
+    oscillator.type = type
+    oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime)
+    
+    gainNode.gain.setValueAtTime(0, this.audioContext.currentTime)
+    gainNode.gain.linearRampToValueAtTime(volume, this.audioContext.currentTime + 0.01)
+    gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + duration)
+    
+    oscillator.connect(gainNode)
+    gainNode.connect(this.masterGain)
+    
+    oscillator.start(this.audioContext.currentTime)
+    oscillator.stop(this.audioContext.currentTime + duration)
+  }
+
+  private playFrequencySequence(sequence: Array<{freq: number, duration: number, volume?: number}>) {
+    let currentTime = 0
+    sequence.forEach(({ freq, duration, volume = 0.2 }) => {
+      setTimeout(() => {
+        this.playTone(freq, duration, 'sine', volume)
+      }, currentTime * 1000)
+      currentTime += duration + 0.05 // Small gap between tones
+    })
+  }
+
+  // Advanced Audio Effects
+  createSpatialAudio(x: number, y: number, z: number = 0) {
+    if (!this.audioContext) return null
+
+    const panner = this.audioContext.createPanner()
+    panner.panningModel = 'HRTF'
+    panner.distanceModel = 'inverse'
+    panner.refDistance = 1
+    panner.maxDistance = 10000
+    panner.rolloffFactor = 1
+    panner.coneInnerAngle = 360
+    panner.coneOuterAngle = 0
+    panner.coneOuterGain = 0
+
+    panner.setPosition(x, y, z)
+    panner.connect(this.masterGain!)
+
+    return panner
+  }
+
+  playQuantumGlitch() {
     if (!this.audioContext) return
 
-    // Generate startup sound
-    this.sounds.set('startup', this.generateStartupSound())
+    const bufferSize = this.audioContext.sampleRate * 0.1 // 0.1 seconds
+    const buffer = this.audioContext.createBuffer(1, bufferSize, this.audioContext.sampleRate)
+    const data = buffer.getChannelData(0)
+
+    // Generate glitch noise
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * 0.1
+    }
+
+    const source = this.audioContext.createBufferSource()
+    const gainNode = this.audioContext.createGain()
     
-    // Generate button click sound
-    this.sounds.set('click', this.generateClickSound())
+    source.buffer = buffer
+    gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime)
+    gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + 0.1)
     
-    // Generate alert sound
-    this.sounds.set('alert', this.generateAlertSound())
-    
-    // Generate typing sound
-    this.sounds.set('typing', this.generateTypingSound())
-    
-    // Generate success sound
-    this.sounds.set('success', this.generateSuccessSound())
-    
-    // Generate error sound
-    this.sounds.set('error', this.generateErrorSound())
-    
-    // Generate loading screen specific sounds
-    this.sounds.set('loading_ambient', this.generateLoadingAmbientSound())
-    this.sounds.set('loading_beep', this.generateLoadingBeepSound())
-    this.sounds.set('loading_progress', this.generateLoadingProgressSound())
-    this.sounds.set('loading_complete', this.generateLoadingCompleteSound())
-    this.sounds.set('system_initialize', this.generateSystemInitializeSound())
-    this.sounds.set('data_transfer', this.generateDataTransferSound())
+    source.connect(gainNode)
+    gainNode.connect(this.masterGain!)
+    source.start()
   }
 
-  private generateStartupSound(): AudioBuffer {
-    if (!this.audioContext) throw new Error('Audio context not initialized')
+  createReverbEffect() {
+    if (!this.audioContext) return null
+
+    const convolver = this.audioContext.createConvolver()
+    const bufferSize = this.audioContext.sampleRate * 2 // 2 seconds
+    const buffer = this.audioContext.createBuffer(2, bufferSize, this.audioContext.sampleRate)
     
-    const duration = 2
-    const sampleRate = this.audioContext.sampleRate
-    const frameCount = sampleRate * duration
-    const buffer = this.audioContext.createBuffer(2, frameCount, sampleRate)
-
-    for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
-      const channelData = buffer.getChannelData(channel)
-      
-      for (let i = 0; i < frameCount; i++) {
-        const t = i / sampleRate
-        
-        // Create a sci-fi startup sound with multiple frequencies
-        const freq1 = 200 + (t * 300) // Rising frequency
-        const freq2 = 400 + (t * 200)
-        const freq3 = 100 + (t * 150)
-        
-        const wave1 = Math.sin(2 * Math.PI * freq1 * t)
-        const wave2 = Math.sin(2 * Math.PI * freq2 * t) * 0.5
-        const wave3 = Math.sin(2 * Math.PI * freq3 * t) * 0.3
-        
-        // Envelope for fade in/out
-        const envelope = Math.sin(Math.PI * t / duration)
-        
-        channelData[i] = (wave1 + wave2 + wave3) * envelope * 0.1
-      }
-    }
-
-    return buffer
-  }
-
-  private generateClickSound(): AudioBuffer {
-    if (!this.audioContext) throw new Error('Audio context not initialized')
+    const leftChannel = buffer.getChannelData(0)
+    const rightChannel = buffer.getChannelData(1)
     
-    const duration = 0.1
-    const sampleRate = this.audioContext.sampleRate
-    const frameCount = sampleRate * duration
-    const buffer = this.audioContext.createBuffer(2, frameCount, sampleRate)
-
-    for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
-      const channelData = buffer.getChannelData(channel)
-      
-      for (let i = 0; i < frameCount; i++) {
-        const t = i / sampleRate
-        
-        // Sharp click sound
-        const frequency = 800
-        const wave = Math.sin(2 * Math.PI * frequency * t)
-        const envelope = Math.exp(-t * 50) // Quick decay
-        
-        channelData[i] = wave * envelope * 0.2
-      }
+    for (let i = 0; i < bufferSize; i++) {
+      const decay = Math.pow(1 - (i / bufferSize), 2)
+      leftChannel[i] = (Math.random() * 2 - 1) * decay * 0.1
+      rightChannel[i] = (Math.random() * 2 - 1) * decay * 0.1
     }
-
-    return buffer
-  }
-
-  private generateAlertSound(): AudioBuffer {
-    if (!this.audioContext) throw new Error('Audio context not initialized')
     
-    const duration = 1
-    const sampleRate = this.audioContext.sampleRate
-    const frameCount = sampleRate * duration
-    const buffer = this.audioContext.createBuffer(2, frameCount, sampleRate)
-
-    for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
-      const channelData = buffer.getChannelData(channel)
-      
-      for (let i = 0; i < frameCount; i++) {
-        const t = i / sampleRate
-        
-        // Alternating high-low alarm sound
-        const frequency = t % 0.5 < 0.25 ? 800 : 400
-        const wave = Math.sin(2 * Math.PI * frequency * t)
-        const envelope = 0.5
-        
-        channelData[i] = wave * envelope * 0.15
-      }
-    }
-
-    return buffer
-  }
-
-  private generateTypingSound(): AudioBuffer {
-    if (!this.audioContext) throw new Error('Audio context not initialized')
+    convolver.buffer = buffer
+    convolver.connect(this.masterGain!)
     
-    const duration = 0.05
-    const sampleRate = this.audioContext.sampleRate
-    const frameCount = sampleRate * duration
-    const buffer = this.audioContext.createBuffer(2, frameCount, sampleRate)
-
-    for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
-      const channelData = buffer.getChannelData(channel)
-      
-      for (let i = 0; i < frameCount; i++) {
-        const t = i / sampleRate
-        
-        // Quick typing sound
-        const noise = (Math.random() - 0.5) * 2
-        const envelope = Math.exp(-t * 100)
-        
-        channelData[i] = noise * envelope * 0.1
-      }
-    }
-
-    return buffer
+    return convolver
   }
 
-  private generateSuccessSound(): AudioBuffer {
-    if (!this.audioContext) throw new Error('Audio context not initialized')
-    
-    const duration = 0.5
-    const sampleRate = this.audioContext.sampleRate
-    const frameCount = sampleRate * duration
-    const buffer = this.audioContext.createBuffer(2, frameCount, sampleRate)
-
-    for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
-      const channelData = buffer.getChannelData(channel)
-      
-      for (let i = 0; i < frameCount; i++) {
-        const t = i / sampleRate
-        
-        // Success chord progression
-        const freq1 = 523.25 // C5
-        const freq2 = 659.25 // E5
-        const freq3 = 783.99 // G5
-        
-        const wave1 = Math.sin(2 * Math.PI * freq1 * t)
-        const wave2 = Math.sin(2 * Math.PI * freq2 * t)
-        const wave3 = Math.sin(2 * Math.PI * freq3 * t)
-        
-        const envelope = Math.exp(-t * 3)
-        
-        channelData[i] = (wave1 + wave2 + wave3) * envelope * 0.05
-      }
-    }
-
-    return buffer
-  }
-
-  private generateErrorSound(): AudioBuffer {
-    if (!this.audioContext) throw new Error('Audio context not initialized')
-    
-    const duration = 0.3
-    const sampleRate = this.audioContext.sampleRate
-    const frameCount = sampleRate * duration
-    const buffer = this.audioContext.createBuffer(2, frameCount, sampleRate)
-
-    for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
-      const channelData = buffer.getChannelData(channel)
-      
-      for (let i = 0; i < frameCount; i++) {
-        const t = i / sampleRate
-        
-        // Harsh error sound
-        const frequency = 150 // Low frequency
-        const wave = Math.sin(2 * Math.PI * frequency * t)
-        const distortion = Math.sign(wave) // Square wave distortion
-        const envelope = Math.exp(-t * 5)
-        
-        channelData[i] = distortion * envelope * 0.1
-      }
-    }
-
-    return buffer
-  }
-
-  private generateLoadingAmbientSound(): AudioBuffer {
-    if (!this.audioContext) throw new Error('Audio context not initialized')
-    
-    const duration = 3
-    const sampleRate = this.audioContext.sampleRate
-    const frameCount = sampleRate * duration
-    const buffer = this.audioContext.createBuffer(2, frameCount, sampleRate)
-
-    for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
-      const channelData = buffer.getChannelData(channel)
-      
-      for (let i = 0; i < frameCount; i++) {
-        const t = i / sampleRate
-        
-        // Low-frequency cyberpunk ambient hum
-        const freq1 = 60 + Math.sin(t * 0.5) * 20 // Slow oscillating bass
-        const freq2 = 120 + Math.sin(t * 0.7) * 30
-        const freq3 = 40 + Math.sin(t * 0.3) * 15
-        
-        const wave1 = Math.sin(2 * Math.PI * freq1 * t)
-        const wave2 = Math.sin(2 * Math.PI * freq2 * t) * 0.6
-        const wave3 = Math.sin(2 * Math.PI * freq3 * t) * 0.4
-        
-        // Add subtle digital noise
-        const noise = (Math.random() - 0.5) * 0.05
-        
-        // Subtle envelope to prevent clicking
-        const envelope = Math.min(1, Math.min(t * 2, (duration - t) * 2))
-        
-        channelData[i] = (wave1 + wave2 + wave3 + noise) * envelope * 0.08
-      }
-    }
-
-    return buffer
-  }
-
-  private generateLoadingBeepSound(): AudioBuffer {
-    if (!this.audioContext) throw new Error('Audio context not initialized')
-    
-    const duration = 0.15
-    const sampleRate = this.audioContext.sampleRate
-    const frameCount = sampleRate * duration
-    const buffer = this.audioContext.createBuffer(2, frameCount, sampleRate)
-
-    for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
-      const channelData = buffer.getChannelData(channel)
-      
-      for (let i = 0; i < frameCount; i++) {
-        const t = i / sampleRate
-        
-        // High-pitched system beep
-        const frequency = 1200
-        const wave = Math.sin(2 * Math.PI * frequency * t)
-        const envelope = Math.exp(-t * 15) // Quick decay
-        
-        channelData[i] = wave * envelope * 0.15
-      }
-    }
-
-    return buffer
-  }
-
-  private generateLoadingProgressSound(): AudioBuffer {
-    if (!this.audioContext) throw new Error('Audio context not initialized')
-    
-    const duration = 0.08
-    const sampleRate = this.audioContext.sampleRate
-    const frameCount = sampleRate * duration
-    const buffer = this.audioContext.createBuffer(2, frameCount, sampleRate)
-
-    for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
-      const channelData = buffer.getChannelData(channel)
-      
-      for (let i = 0; i < frameCount; i++) {
-        const t = i / sampleRate
-        
-        // Subtle progress tick sound
-        const frequency = 800 + (t * 200) // Rising frequency
-        const wave = Math.sin(2 * Math.PI * frequency * t)
-        const envelope = Math.exp(-t * 25)
-        
-        channelData[i] = wave * envelope * 0.08
-      }
-    }
-
-    return buffer
-  }
-
-  private generateLoadingCompleteSound(): AudioBuffer {
-    if (!this.audioContext) throw new Error('Audio context not initialized')
-    
-    const duration = 1.5
-    const sampleRate = this.audioContext.sampleRate
-    const frameCount = sampleRate * duration
-    const buffer = this.audioContext.createBuffer(2, frameCount, sampleRate)
-
-    for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
-      const channelData = buffer.getChannelData(channel)
-      
-      for (let i = 0; i < frameCount; i++) {
-        const t = i / sampleRate
-        
-        // Triumphant completion sound with cyber elements
-        const freq1 = 440 + (t * 100) // Rising fundamental
-        const freq2 = 880 + (t * 200) // Higher harmonic
-        const freq3 = 1320 + (t * 150) // Even higher harmonic
-        
-        const wave1 = Math.sin(2 * Math.PI * freq1 * t)
-        const wave2 = Math.sin(2 * Math.PI * freq2 * t) * 0.7
-        const wave3 = Math.sin(2 * Math.PI * freq3 * t) * 0.5
-        
-        // Add some digital modulation
-        const modulation = Math.sin(2 * Math.PI * 10 * t) * 0.1 + 1
-        
-        const envelope = Math.exp(-t * 1.5) * Math.sin(Math.PI * t / duration)
-        
-        channelData[i] = (wave1 + wave2 + wave3) * modulation * envelope * 0.12
-      }
-    }
-
-    return buffer
-  }
-
-  private generateSystemInitializeSound(): AudioBuffer {
-    if (!this.audioContext) throw new Error('Audio context not initialized')
-    
-    const duration = 0.5
-    const sampleRate = this.audioContext.sampleRate
-    const frameCount = sampleRate * duration
-    const buffer = this.audioContext.createBuffer(2, frameCount, sampleRate)
-
-    for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
-      const channelData = buffer.getChannelData(channel)
-      
-      for (let i = 0; i < frameCount; i++) {
-        const t = i / sampleRate
-        
-        // System boot-up sound
-        const freq1 = 100 + (t * 400) // Rising sweep
-        const freq2 = 200 + (t * 300)
-        
-        const wave1 = Math.sin(2 * Math.PI * freq1 * t)
-        const wave2 = Math.sin(2 * Math.PI * freq2 * t) * 0.6
-        
-        // Add digital artifacts
-        const digitalNoise = Math.sin(2 * Math.PI * 50 * t) * 0.1
-        
-        const envelope = t < 0.1 ? t * 10 : Math.exp(-(t - 0.1) * 3)
-        
-        channelData[i] = (wave1 + wave2 + digitalNoise) * envelope * 0.1
-      }
-    }
-
-    return buffer
-  }
-
-  private generateDataTransferSound(): AudioBuffer {
-    if (!this.audioContext) throw new Error('Audio context not initialized')
-    
-    const duration = 0.3
-    const sampleRate = this.audioContext.sampleRate
-    const frameCount = sampleRate * duration
-    const buffer = this.audioContext.createBuffer(2, frameCount, sampleRate)
-
-    for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
-      const channelData = buffer.getChannelData(channel)
-      
-      for (let i = 0; i < frameCount; i++) {
-        const t = i / sampleRate
-        
-        // Data transmission sound with digital modulation
-        const carrierFreq = 600
-        const modulationFreq = 15
-        
-        const carrier = Math.sin(2 * Math.PI * carrierFreq * t)
-        const modulation = Math.sin(2 * Math.PI * modulationFreq * t) * 0.5 + 0.5
-        
-        // Add some noise for digital feel
-        const noise = (Math.random() - 0.5) * 0.2
-        
-        const envelope = Math.exp(-t * 5)
-        
-        channelData[i] = (carrier * modulation + noise) * envelope * 0.06
-      }
-    }
-
-    return buffer
-  }
-
-  play(soundName: string, volume: number = 1) {
-    if (!this.isInitialized || !this.audioContext || !this.sounds.has(soundName)) {
-      return
-    }
-
-    try {
-      const buffer = this.sounds.get(soundName)!
-      const source = this.audioContext.createBufferSource()
-      const gainNode = this.audioContext.createGain()
-      
-      source.buffer = buffer
-      gainNode.gain.value = Math.max(0, Math.min(1, volume))
-      
-      source.connect(gainNode)
-      gainNode.connect(this.audioContext.destination)
-      
-      source.start()
-    } catch (error) {
-      console.warn('Failed to play sound:', soundName, error)
-    }
-  }
-
-  // Convenient methods
-  playSystemStartup() { this.play('startup', 0.3) }
-  playClick() { this.play('click', 0.5) }
-  playAlert() { this.play('alert', 0.4) }
-  playTyping() { this.play('typing', 0.3) }
-  playSuccess() { this.play('success', 0.6) }
-  playError() { this.play('error', 0.5) }
-  
-  // Loading screen specific methods
-  playLoadingAmbient() { this.play('loading_ambient', 0.2) }
-  playLoadingBeep() { this.play('loading_beep', 0.3) }
-  playLoadingProgress() { this.play('loading_progress', 0.25) }
-  playLoadingComplete() { this.play('loading_complete', 0.4) }
-  playSystemInitialize() { this.play('system_initialize', 0.35) }
-  playDataTransfer() { this.play('data_transfer', 0.3) }
-
-  // Advanced loading audio management
-  private loadingAmbientSource: AudioBufferSourceNode | null = null
-  
-  startLoadingAmbient() {
-    if (!this.isInitialized || !this.audioContext || !this.sounds.has('loading_ambient')) {
-      return
-    }
-
-    try {
-      // Stop any existing ambient sound
-      this.stopLoadingAmbient()
-      
-      const buffer = this.sounds.get('loading_ambient')!
-      const source = this.audioContext.createBufferSource()
-      const gainNode = this.audioContext.createGain()
-      
-      source.buffer = buffer
-      source.loop = true // Loop the ambient sound
-      gainNode.gain.value = 0.15
-      
-      source.connect(gainNode)
-      gainNode.connect(this.audioContext.destination)
-      
-      this.loadingAmbientSource = source
-      source.start()
-    } catch (error) {
-      console.warn('Failed to start loading ambient sound:', error)
-    }
-  }
-  
-  stopLoadingAmbient() {
-    if (this.loadingAmbientSource) {
-      try {
-        this.loadingAmbientSource.stop()
-      } catch (error) {
-        // Sound might already be stopped
-      }
-      this.loadingAmbientSource = null
-    }
-  }
-
+  // Cleanup
   cleanup() {
-    if (this.audioContext) {
+    // Stop all oscillators
+    this.oscillators.forEach(oscillator => {
+      try {
+        oscillator.stop()
+      } catch (e) {
+        // Oscillator might already be stopped
+      }
+    })
+    this.oscillators.clear()
+
+    // Close audio context
+    if (this.audioContext && this.audioContext.state !== 'closed') {
       this.audioContext.close()
-      this.audioContext = null
     }
-    this.sounds.clear()
-    this.isInitialized = false
+  }
+
+  // Getters
+  get isAudioEnabled(): boolean {
+    return this.isInitialized && this.audioContext?.state === 'running'
+  }
+
+  get currentVolume(): number {
+    return this.volume
+  }
+
+  get muted(): boolean {
+    return this.isMuted
+  }
+
+  // Additional methods needed by the application
+  initialize() {
+    return this.initializeQuantumAudio()
+  }
+
+  playPageTransition() {
+    this.playThemeChange()
+  }
+
+  playTyping() {
+    this.playKeyPress()
+  }
+
+  playSystemInitialize() {
+    this.playSystemStartup()
+  }
+
+  startLoadingAmbient() {
+    this.startAmbientHum()
+  }
+
+  stopLoadingAmbient() {
+    this.stopAmbientSounds()
+  }
+
+  playLoadingBeep() {
+    this.playClick()
+  }
+
+  playLoadingProgress() {
+    this.playHover()
+  }
+
+  playDataTransfer() {
+    this.playKeyPress()
+  }
+
+  playLoadingComplete() {
+    this.playScanComplete()
+  }
+
+  get context(): AudioContext | null {
+    return this.audioContext
   }
 }
+
+export default AudioManager

@@ -365,7 +365,7 @@ const ThreatDetector: React.FC<ThreatDetectorProps> = ({ audioManager }) => {
         
         // Play alert sound for critical threats
         if (randomSeverity === 'critical' || randomSeverity === 'error') {
-          audioManager.playAlert()
+          audioManager.playAlert('critical')
         }
       }
     } catch (error) {
@@ -464,7 +464,7 @@ const ThreatDetector: React.FC<ThreatDetectorProps> = ({ audioManager }) => {
     setScanProgress(0)
     setScanResults([])
     setScanningStatus('Initializing scan...')
-    audioManager.playAlert()
+    audioManager.playAlert('critical')
 
     // Simulate comprehensive security scan
     for (let i = 0; i < scanTypes.length; i++) {
@@ -492,7 +492,7 @@ const ThreatDetector: React.FC<ThreatDetectorProps> = ({ audioManager }) => {
       if (result.status === 'threat') {
         audioManager.playError()
       } else if (result.status === 'suspicious') {
-        audioManager.playAlert()
+        audioManager.playAlert('critical')
       }
     }
 

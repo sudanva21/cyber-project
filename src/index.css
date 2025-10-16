@@ -1,184 +1,406 @@
-/* Custom Cybersec Color Palette - Unique to avoid typical AI colors */
-:root {
-  /* Primary Cyber Colors - Deep Tech Vibes */
-  --cyber-primary: #00d4ff;        /* Electric Ice Blue */
-  --cyber-secondary: #ff006e;      /* Neon Magenta */
-  --cyber-accent: #8b5cf6;         /* Deep Violet */
-  --cyber-warning: #fbbf24;        /* Amber Alert */
-  --cyber-danger: #ef4444;         /* Critical Red */
-  --cyber-success: #10b981;        /* Secure Green */
-  
-  /* Dark Theme Variations */
-  --cyber-bg-primary: #0a0b0f;     /* Deep Space Black */
-  --cyber-bg-secondary: #111827;   /* Darker Gray */
-  --cyber-bg-tertiary: #1f2937;    /* Medium Dark */
-  --cyber-surface: #374151;        /* Surface Gray */
-  
-  /* Text Colors */
-  --cyber-text-primary: #f3f4f6;   /* Bright White */
-  --cyber-text-secondary: #d1d5db; /* Light Gray */
-  --cyber-text-muted: #9ca3af;     /* Muted Gray */
-  
-  /* Special Effects */
-  --cyber-glow: 0 0 20px currentColor;
-  --cyber-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
-  
-  /* Hacker Fonts */
-  --font-primary: 'Orbitron', monospace;
-  --font-code: 'Share Tech Mono', monospace;
-  --font-body: 'Inter', 'Segoe UI', 'Arial', sans-serif;
-}
+/* NEXUS CYBER SHIELD - GLOBAL STYLES */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
 
+/* Reset and Base */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-body {
-  font-family: var(--font-body);
-  background: var(--cyber-bg-primary);
-  color: var(--cyber-text-primary);
-  overflow-x: hidden;
-  min-height: 100vh;
+html {
   font-size: 16px;
-  line-height: 1.6;
-  font-weight: 400;
-  letter-spacing: 0.025em;
+  scroll-behavior: smooth;
+  height: auto;
+  min-height: 100vh;
 }
 
-/* Scrollbar Styling */
-::-webkit-scrollbar {
-  width: 8px;
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #000000;
+  color: #ffffff;
+  overflow-x: hidden;
+  height: auto;
+  min-height: 100vh;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--cyber-bg-secondary);
+#root {
+  min-height: 100vh;
+  height: auto;
+  position: relative;
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--cyber-primary);
-  border-radius: 4px;
+/* Nexus App Container */
+.nexus-app {
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--cyber-secondary);
+/* Ensure child elements can scroll properly */
+.nexus-app > .quantum-background,
+.nexus-app > .neural-background,
+.nexus-app > .holographic-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
 }
 
-/* Selection Styling */
-::selection {
-  background: var(--cyber-primary);
-  color: var(--cyber-bg-primary);
-}
-
-/* Base Typography */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-primary);
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-
-code, pre {
-  font-family: var(--font-code);
-}
-
-/* Button Base Styles */
-button {
-  font-family: var(--font-primary);
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-/* Input Base Styles */
-input, textarea, select {
-  font-family: var(--font-code);
-  background: var(--cyber-bg-secondary);
-  border: 1px solid var(--cyber-surface);
-  color: var(--cyber-text-primary);
-  padding: 0.75rem;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-}
-
-input:focus, textarea:focus, select:focus {
-  outline: none;
-  border-color: var(--cyber-primary);
-  box-shadow: var(--cyber-shadow);
+/* Main content area */
+.nexus-app > div:not(.quantum-background):not(.neural-background):not(.holographic-background):not(.ai-assistant):not(.notification-system):not(.voice-navigator) {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  overflow-y: auto;
+  width: 100%;
 }
 
 /* Utility Classes */
-.text-cyber-primary { color: var(--cyber-primary); }
-.text-cyber-secondary { color: var(--cyber-secondary); }
-.text-cyber-accent { color: var(--cyber-accent); }
-.text-cyber-warning { color: var(--cyber-warning); }
-.text-cyber-danger { color: var(--cyber-danger); }
-.text-cyber-success { color: var(--cyber-success); }
-
-.bg-cyber-primary { background-color: var(--cyber-primary); }
-.bg-cyber-secondary { background-color: var(--cyber-secondary); }
-.bg-cyber-surface { background-color: var(--cyber-surface); }
-
-.font-code { font-family: var(--font-code); }
-.font-primary { font-family: var(--font-primary); }
-.font-body { font-family: var(--font-body); }
-
-/* Enhanced body text readability */
-p, li, span:not(.font-code):not(.font-primary), div:not(.font-code):not(.font-primary) {
-  font-family: var(--font-body);
-  font-weight: 400;
-  line-height: 1.6;
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
-/* Cyber Glow Effects */
-.cyber-glow {
-  text-shadow: var(--cyber-glow);
+.flex {
+  display: flex;
 }
 
-.cyber-border {
-  border: 1px solid var(--cyber-primary);
-  box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+.justify-center {
+  justify-content: center;
 }
 
-/* Loading Animation */
-@keyframes cyber-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+.justify-between {
+  justify-content: space-between;
 }
 
-.cyber-pulse {
-  animation: cyber-pulse 2s ease-in-out infinite;
+.items-center {
+  align-items: center;
 }
 
-/* Glitch Effect */
-@keyframes glitch {
-  0% { transform: translate(0); }
-  20% { transform: translate(-2px, 2px); }
-  40% { transform: translate(-2px, -2px); }
-  60% { transform: translate(2px, 2px); }
-  80% { transform: translate(2px, -2px); }
-  100% { transform: translate(0); }
+.text-center {
+  text-align: center;
 }
 
-.glitch-effect {
-  animation: glitch 0.3s ease-in-out infinite alternate;
+.space-x-6 > * + * {
+  margin-left: 1.5rem;
 }
 
-/* Matrix-style text effects */
-@keyframes matrix-rain {
-  0% { transform: translateY(-100vh); opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translateY(100vh); opacity: 0; }
+.space-y-2 > * + * {
+  margin-top: 0.5rem;
 }
 
-.matrix-text {
-  animation: matrix-rain 4s linear infinite;
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Quantum Initializing Screen */
+.nexus-initializing {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.1) 0%, rgba(0, 0, 0, 0.95) 70%);
+  z-index: 10000;
+}
+
+/* Quantum Controls - Moved to QuantumTheme.css and OverlappingFloatingElements.css */
+
+/* Quantum Suspense Loading */
+.quantum-suspense {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+}
+
+.loading-quantum {
+  font-size: 4rem;
+  color: #00d4ff;
+  filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5));
+}
+
+/* Holographic Landing Specific */
+.holographic-landing {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.hero-section {
+  position: relative;
+  z-index: 2;
+}
+
+.threat-map-section,
+.features-showcase {
+  position: relative;
+  z-index: 2;
+}
+
+/* Command Terminal */
+.command-terminal {
+  font-family: 'JetBrains Mono', monospace;
+  max-height: 200px;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  :root {
-    font-size: 14px;
+  .container {
+    padding: 0 1rem;
   }
+  
+  .quantum-controls {
+    left: 1rem;
+    transform: scale(0.9) translateY(-50%);
+  }
+  
+  .command-terminal {
+    left: 1rem;
+    right: 1rem;
+  }
+  
+  .holographic-landing .hero-section {
+    padding-top: 100px;
+  }
+  
+  .holographic-landing .hero-content {
+    margin-top: 4rem !important;
+  }
+  
+  .hero-actions {
+    flex-direction: column !important;
+  }
+  
+  .holographic-btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Removed conflicting quantum-controls styles */
+  
+  .command-terminal {
+    padding: 0.75rem;
+  }
+  
+  .holographic-title h1 {
+    font-size: 2rem !important;
+  }
+  
+  .hero-tagline {
+    font-size: 1rem !important;
+  }
+}
+
+/* Dark mode selection */
+::selection {
+  background: rgba(0, 212, 255, 0.3);
+  color: white;
+}
+
+::-moz-selection {
+  background: rgba(0, 212, 255, 0.3);
+  color: white;
+}
+
+/* Improved focus styles for accessibility */
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 2px solid #00d4ff;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .holographic-panel,
+  .quantum-card,
+  .holographic-card {
+    border-width: 2px;
+  }
+  
+  .holographic-text,
+  .quantum-title {
+    filter: contrast(1.5);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .quantum-pulse,
+  .holographic-pulse,
+  .neural-pulse {
+    animation: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .quantum-controls,
+  .command-terminal,
+  .ai-assistant,
+  .voice-navigator,
+  .notification-system {
+    display: none !important;
+  }
+  
+  .holographic-landing,
+  .quantum-dashboard {
+    background: white !important;
+    color: black !important;
+  }
+}
+
+/* Improved accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #00d4ff, #7c3aed);
+  border-radius: 6px;
+  border: 2px solid rgba(0, 0, 0, 0.5);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #7c3aed, #00d4ff);
+}
+
+::-webkit-scrollbar-corner {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Enhanced text rendering */
+.holographic-text,
+.quantum-title,
+.neural-text {
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+/* Quantum Dashboard specific styles */
+.quantum-dashboard {
+  position: relative;
+  z-index: 1;
+}
+
+.quantum-dashboard .overview-section,
+.quantum-dashboard .threats-section,
+.quantum-dashboard .tools-section,
+.quantum-dashboard .analytics-section {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+/* Performance optimizations */
+.quantum-background-canvas,
+.neural-canvas,
+.holographic-container canvas {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.holographic-panel,
+.quantum-card,
+.holographic-card {
+  contain: layout style paint;
+}
+
+/* Loading states */
+.loading-state {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: wait;
+}
+
+.loading-state * {
+  cursor: wait;
+}
+
+/* Error states */
+.error-state {
+  color: #ef4444;
+  border-color: #ef4444;
+}
+
+.error-state .holographic-text,
+.error-state .quantum-title {
+  color: #ef4444;
+}
+
+/* Success states */
+.success-state {
+  color: #10b981;
+  border-color: #10b981;
+}
+
+.success-state .holographic-text,
+.success-state .quantum-title {
+  color: #10b981;
 }

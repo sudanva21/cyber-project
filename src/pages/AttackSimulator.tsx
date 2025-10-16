@@ -164,7 +164,7 @@ const AttackSimulator: React.FC<AttackSimulatorProps> = ({ audioManager }) => {
     setSimulationRunning(true)
     setSimulationProgress(0)
     setSimulationLog([])
-    audioManager.playAlert()
+    audioManager.playAlert('high')
 
     // Enhanced simulation with realistic log messages
     const logMessages = [
@@ -189,7 +189,7 @@ const AttackSimulator: React.FC<AttackSimulatorProps> = ({ audioManager }) => {
       
       // Enhanced sound effects during simulation
       if (i === 2) audioManager.playClick() // Target established
-      if (i === 4) audioManager.playAlert() // Attack initiated
+      if (i === 4) audioManager.playAlert('high') // Attack initiated
       if (i === 6) audioManager.playClick() // Defense activated
     }
 

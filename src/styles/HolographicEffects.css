@@ -1,0 +1,461 @@
+/* NEXUS CYBER SHIELD - HOLOGRAPHIC EFFECTS SYSTEM */
+
+/* Holographic Base Effects */
+.holographic-container {
+  position: relative;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.holographic-panel {
+  background: linear-gradient(135deg, 
+    rgba(0, 212, 255, 0.1) 0%,
+    rgba(124, 58, 237, 0.1) 50%,
+    rgba(16, 185, 129, 0.1) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 60px rgba(0, 212, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.holographic-panel::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(0, 212, 255, 0.1),
+    rgba(124, 58, 237, 0.1),
+    rgba(16, 185, 129, 0.1),
+    rgba(0, 212, 255, 0.1)
+  );
+  animation: holographic-rotate 10s linear infinite;
+  z-index: -1;
+}
+
+.holographic-panel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(124, 58, 237, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes holographic-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Holographic Text Effects */
+.holographic-text {
+  background: linear-gradient(45deg, #00d4ff, #7c3aed, #10b981, #00d4ff);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: holographic-text-flow 3s ease-in-out infinite;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+@keyframes holographic-text-flow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.holographic-title {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-family: 'Orbitron', monospace;
+  text-align: center;
+  position: relative;
+  margin: 2rem 0;
+}
+
+.holographic-title::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(ellipse, rgba(0, 212, 255, 0.2) 0%, transparent 70%);
+  z-index: -1;
+  animation: holographic-pulse 2s ease-in-out infinite;
+}
+
+/* Holographic Button Effects */
+.holographic-btn {
+  position: relative;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 16px 32px;
+  color: white;
+  font-family: 'Orbitron', monospace;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.holographic-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.holographic-btn:hover::before {
+  left: 100%;
+}
+
+.holographic-btn:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 
+    0 10px 40px rgba(0, 212, 255, 0.3),
+    0 0 60px rgba(0, 212, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(0, 212, 255, 0.5);
+}
+
+.holographic-btn:active {
+  transform: translateY(-2px) scale(0.98);
+}
+
+/* Holographic Card Effects */
+.holographic-card {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 32px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.holographic-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+    rgba(0, 212, 255, 0.2),
+    rgba(124, 58, 237, 0.2),
+    rgba(16, 185, 129, 0.2)
+  );
+  background-size: 400% 400%;
+  border-radius: 22px;
+  z-index: -1;
+  opacity: 0;
+  animation: holographic-border 4s ease-in-out infinite;
+  transition: opacity 0.4s ease;
+}
+
+.holographic-card:hover::before {
+  opacity: 1;
+}
+
+.holographic-card:hover {
+  transform: translateY(-8px) rotateX(5deg);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    0 0 80px rgba(0, 212, 255, 0.2);
+}
+
+@keyframes holographic-border {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Holographic Loader */
+.holographic-loader {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+}
+
+.holographic-loader::before,
+.holographic-loader::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  animation: holographic-loader-spin 2s linear infinite;
+}
+
+.holographic-loader::before {
+  width: 100%;
+  height: 100%;
+  border: 3px solid transparent;
+  border-top: 3px solid #00d4ff;
+  border-right: 3px solid #7c3aed;
+}
+
+.holographic-loader::after {
+  width: 80%;
+  height: 80%;
+  top: 10%;
+  left: 10%;
+  border: 3px solid transparent;
+  border-bottom: 3px solid #10b981;
+  border-left: 3px solid #00d4ff;
+  animation-duration: 1.5s;
+  animation-direction: reverse;
+}
+
+@keyframes holographic-loader-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Holographic Progress Bar */
+.holographic-progress {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.holographic-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #00d4ff, #7c3aed, #10b981);
+  background-size: 200% 100%;
+  animation: holographic-progress-flow 2s ease-in-out infinite;
+  border-radius: 4px;
+  position: relative;
+  transition: width 0.5s ease;
+}
+
+.holographic-progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: holographic-progress-shine 1.5s ease-in-out infinite;
+}
+
+@keyframes holographic-progress-flow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes holographic-progress-shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+/* Holographic Badge */
+.holographic-badge {
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #00d4ff;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+
+.holographic-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: holographic-badge-shine 3s ease-in-out infinite;
+}
+
+@keyframes holographic-badge-shine {
+  0%, 90% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Holographic Input */
+.holographic-input {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px 20px;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  width: 100%;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.holographic-input:focus {
+  outline: none;
+  border-color: rgba(0, 212, 255, 0.5);
+  box-shadow: 
+    0 0 0 3px rgba(0, 212, 255, 0.1),
+    0 0 30px rgba(0, 212, 255, 0.2);
+}
+
+.holographic-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Holographic Tooltip */
+.holographic-tooltip {
+  position: relative;
+  cursor: help;
+}
+
+.holographic-tooltip::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  z-index: 1000;
+}
+
+.holographic-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: 117%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(0, 212, 255, 0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.holographic-tooltip:hover::before,
+.holographic-tooltip:hover::after {
+  opacity: 1;
+}
+
+/* Holographic Pulse Effect */
+@keyframes holographic-pulse {
+  0%, 100% { 
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+.holographic-pulse {
+  animation: holographic-pulse 2s ease-in-out infinite;
+}
+
+/* Holographic Glow */
+.holographic-glow {
+  position: relative;
+  z-index: 1;
+}
+
+.holographic-glow::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background: linear-gradient(45deg, #00d4ff, #7c3aed, #10b981);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  filter: blur(10px);
+  transition: opacity 0.3s ease;
+}
+
+.holographic-glow:hover::before {
+  opacity: 0.7;
+}
+
+/* Responsive Holographic Effects */
+@media (max-width: 768px) {
+  .holographic-panel {
+    border-radius: 12px;
+    padding: 20px;
+  }
+  
+  .holographic-card {
+    border-radius: 16px;
+    padding: 24px;
+  }
+  
+  .holographic-btn {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+  
+  .holographic-title {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .holographic-panel::before,
+  .holographic-text,
+  .holographic-progress-bar,
+  .holographic-badge::before,
+  .holographic-loader::before,
+  .holographic-loader::after {
+    animation: none;
+  }
+}
