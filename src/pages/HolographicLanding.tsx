@@ -208,10 +208,11 @@ const HolographicLanding: React.FC<HolographicLandingProps> = ({
           background: 'rgba(0, 0, 0, 0.9)',
           backdropFilter: 'blur(20px)',
           borderBottom: '1px solid rgba(0, 212, 255, 0.3)',
-          padding: 'clamp(0.75rem, 3vw, 1rem) clamp(1rem, 4vw, 2rem)'
+          padding: 'clamp(0.75rem, 3vw, 1rem) clamp(1rem, 4vw, 2rem)',
+          pointerEvents: 'auto'
         }}
       >
-        <div className="flex justify-between items-center" style={{ flexWrap: 'wrap', gap: '1rem' }}>
+        <div className="flex justify-between items-center" style={{ flexWrap: 'wrap', gap: '1rem', marginLeft: '120px' }}>
           <div className="holographic-text" style={{ fontSize: 'clamp(1.2rem, 4vw, 1.5rem)', fontFamily: 'Orbitron, monospace' }}>
             NEXUS
           </div>

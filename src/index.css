@@ -38,11 +38,22 @@ body {
 .nexus-app {
   min-height: 100vh;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: visible; /* Allow fixed positioned elements to show */
   position: relative;
   width: 100%;
   display: flex;
   flex-direction: column;
+}
+
+/* Navigation Area Protection */
+.quantum-header {
+  /* Create exclusion zone for quantum navigation */
+  clip-path: polygon(120px 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%);
+}
+
+/* Ensure navigation is always on top */
+.quantum-nav-container {
+  z-index: 2147483647 !important;
 }
 
 /* Ensure child elements can scroll properly */

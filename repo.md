@@ -464,6 +464,39 @@ VITE_DEBUG_MODE=false
 
 ---
 
+## 📝 **Recent Changes**
+
+### **Version 2.0.1** - December 2024
+#### **Floating Controls Alignment Enhancement**
+- ✅ **Vertical Layout Improvement**: Modified `OverlappingFloatingElements` component to align floating controls in a straight vertical line
+  - **Microphone Control (🎤)**: Primary floating button positioned at top
+  - **React Button (⚛️)**: Secondary control aligned 80px below microphone
+  - **Brain Button (🧠)**: Third control positioned 160px from top
+  - **Crystal Button (🔮)**: Bottom control positioned 240px from top
+  
+- 🎨 **UI/UX Enhancements**:
+  - Container width optimized from 120px to 80px for cleaner single-column layout
+  - Container height increased to 320px to accommodate vertical spacing
+  - Maintained fixed positioning (`left: 1rem`) to preserve floating behavior
+  - Updated responsive breakpoints for tablet (1024px) and mobile (768px) devices
+  
+- 🔧 **Technical Improvements**:
+  - CSS positioning updated in `OverlappingFloatingElements.css`
+  - All floating elements now share consistent `left: 0` positioning
+  - Incremental `top` positioning with 80px spacing intervals
+  - Preserved all existing animations, hover effects, and quantum glow styling
+  - Debug labels updated to reflect "vertical aligned" layout
+
+- ✅ **Testing Framework**: 
+  - **Target Framework**: Playwright
+  - Browser verification completed successfully
+  - All interactive behaviors maintained (hover effects, click handlers, animations)
+  - Visual alignment confirmed across responsive breakpoints
+
+This enhancement provides a cleaner, more organized interface for the floating microphone controls while maintaining all existing functionality and visual effects.
+
+---
+
 ## 📄 **License**
 
 This project is proprietary software developed for cybersecurity education purposes. All rights reserved.

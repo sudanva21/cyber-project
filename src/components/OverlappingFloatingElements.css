@@ -6,14 +6,14 @@
   transform: translateY(-50%) !important;
   z-index: 9999 !important;
   pointer-events: none;
-  width: 120px;
-  height: 180px;
+  width: 80px;
+  height: 320px;
   display: block !important;
 }
 
 /* Debug indicator - remove after testing */
 .overlapping-floating-container::before {
-  content: "LEFT SIDE ELEMENTS";
+  content: "VERTICAL ALIGNED ELEMENTS";
   position: absolute;
   top: -25px;
   left: 0;
@@ -61,7 +61,7 @@
   position: relative;
 }
 
-/* Individual positioning for overlapping effect */
+/* Individual positioning for vertical alignment */
 .floating-element.microphone {
   top: 0;
   left: 0;
@@ -69,20 +69,20 @@
 }
 
 .floating-element.react {
-  top: 30px;
-  left: 30px;
+  top: 80px;
+  left: 0;
   z-index: 13;
 }
 
 .floating-element.brain {
-  top: 60px;
+  top: 160px;
   left: 0;
   z-index: 12;
 }
 
 .floating-element.crystal {
-  top: 90px;
-  left: 30px;
+  top: 240px;
+  left: 0;
   z-index: 11;
 }
 
@@ -213,8 +213,8 @@
 @media (max-width: 1024px) {
   .overlapping-floating-container {
     left: 1rem !important;
-    width: 80px;
-    height: 160px;
+    width: 60px;
+    height: 240px;
   }
   
   .floating-element {
@@ -227,25 +227,26 @@
   }
   
   .floating-element.react {
-    top: 25px;
-    left: 20px;
+    top: 60px;
+    left: 0;
   }
   
   .floating-element.brain {
-    top: 50px;
+    top: 120px;
+    left: 0;
   }
   
   .floating-element.crystal {
-    top: 75px;
-    left: 20px;
+    top: 180px;
+    left: 0;
   }
 }
 
 @media (max-width: 768px) {
   .overlapping-floating-container {
     left: 0.5rem;
-    width: 60px;
-    height: 120px;
+    width: 50px;
+    height: 200px;
     top: 30%;
   }
   
@@ -259,17 +260,18 @@
   }
   
   .floating-element.react {
-    top: 20px;
-    left: 15px;
+    top: 50px;
+    left: 0;
   }
   
   .floating-element.brain {
-    top: 40px;
+    top: 100px;
+    left: 0;
   }
   
   .floating-element.crystal {
-    top: 60px;
-    left: 15px;
+    top: 150px;
+    left: 0;
   }
   
   .particles {

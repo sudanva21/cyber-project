@@ -99,7 +99,7 @@ const OverlappingFloatingElements: React.FC<OverlappingFloatingElementsProps> = 
         fontSize: '12px',
         pointerEvents: 'none'
       }}>
-        DEBUG: Left Side Elements
+        DEBUG: Vertical Aligned Elements
       </div>
     </div>
   )

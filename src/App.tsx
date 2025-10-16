@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { SupabaseProvider } from './providers/SupabaseProvider'
+import { SupabaseProvider, useSupabase } from './providers/SupabaseProvider'
 import HolographicLoader from './components/HolographicLoader'
 import QuantumBackground from './components/QuantumBackground'
 import AIAssistant from './components/AIAssistant'
@@ -9,6 +9,7 @@ import VoiceNavigator from './components/VoiceNavigator'
 import NotificationSystem from './components/NotificationSystem'
 import OverlappingFloatingElements from './components/OverlappingFloatingElements'
 import ProtectedRoute from './components/ProtectedRoute'
+import QuantumFloatingNav from './components/QuantumFloatingNav'
 import AudioManager from './utils/AudioManager'
 
 // Lazy load components for performance
@@ -120,6 +121,90 @@ interface AppState {
   voiceNavEnabled: boolean
   currentTheme: 'quantum' | 'neural' | 'holographic'
   biometricAuthenticated: boolean
+}
+
+// AppContent component with access to Supabase context
+const AppContent: React.FC<{
+  state: AppState,
+  audioManager: AudioManager,
+  notifications: any[],
+  addNotification: (message: string, type: 'success' | 'warning' | 'error' | 'info') => void,
+  switchTheme: (theme: 'quantum' | 'neural' | 'holographic') => void,
+  toggleVoiceNavigation: () => void,
+  handleMicrophoneClick: () => void,
+  handleReactClick: () => void,
+  handleBrainClick: () => void,
+  handleCrystalClick: () => void
+}> = ({ 
+  state, 
+  audioManager, 
+  notifications, 
+  addNotification, 
+  switchTheme, 
+  toggleVoiceNavigation,
+  handleMicrophoneClick,
+  handleReactClick,
+  handleBrainClick,
+  handleCrystalClick
+}) => {
+  const { user } = useSupabase()
+
+  return (
+    <motion.div 
+      className={`nexus-app theme-${state.currentTheme}`}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 2 }}
+    >
+      {/* Quantum Background System */}
+      <QuantumBackground theme={state.currentTheme} />
+      
+      {/* AI Assistant */}
+      <AnimatePresence>
+        {state.aiAssistantActive && (
+          <AIAssistant 
+            onCommand={(command) => console.log('AI Command:', command)}
+            audioManager={audioManager}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Notification System */}
+      <NotificationSystem notifications={notifications} />
+
+      {/* Overlapping Floating Elements */}
+      <OverlappingFloatingElements
+        onMicrophoneClick={handleMicrophoneClick}
+        onReactClick={handleReactClick}
+        onBrainClick={handleBrainClick}
+        onCrystalClick={handleCrystalClick}
+      />
+
+      {/* Main Application Router */}
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        {/* Quantum Floating Navigation - New Revolutionary Navigation System */}
+        <QuantumFloatingNav 
+          audioManager={audioManager}
+          user={user}
+        />
+
+        {/* Voice Navigation */}
+        {state.voiceNavEnabled && (
+          <VoiceNavigator 
+            onCommand={(command) => console.log('Voice Command:', command)}
+          />
+        )}
+
+        <AppRoutes 
+          state={state}
+          audioManager={audioManager}
+          addNotification={addNotification}
+          switchTheme={switchTheme}
+          toggleVoiceNavigation={toggleVoiceNavigation}
+        />
+      </Router>
+    </motion.div>
+  )
 }
 
 const App: React.FC = () => {
@@ -278,56 +363,18 @@ const App: React.FC = () => {
 
   return (
     <SupabaseProvider>
-      <motion.div 
-        className={`nexus-app theme-${state.currentTheme}`}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 2 }}
-      >
-        {/* Quantum Background System */}
-        <QuantumBackground theme={state.currentTheme} />
-        
-        {/* AI Assistant */}
-        <AnimatePresence>
-          {state.aiAssistantActive && (
-            <AIAssistant 
-              onCommand={(command) => console.log('AI Command:', command)}
-              audioManager={audioManager}
-            />
-          )}
-        </AnimatePresence>
-
-        {/* Notification System */}
-        <NotificationSystem notifications={notifications} />
-
-        {/* Overlapping Floating Elements */}
-        <OverlappingFloatingElements
-          onMicrophoneClick={handleMicrophoneClick}
-          onReactClick={handleReactClick}
-          onBrainClick={handleBrainClick}
-          onCrystalClick={handleCrystalClick}
-        />
-
-        {/* Main Application Router */}
-        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-          {/* Voice Navigation - moved inside Router */}
-          {state.voiceNavEnabled && (
-            <VoiceNavigator 
-              onCommand={(command) => console.log('Voice Command:', command)}
-            />
-          )}
-
-          <AppRoutes 
-            state={state}
-            audioManager={audioManager}
-            addNotification={addNotification}
-            switchTheme={switchTheme}
-            toggleVoiceNavigation={toggleVoiceNavigation}
-          />
-        </Router>
-
-
-      </motion.div>
+      <AppContent 
+        state={state}
+        audioManager={audioManager}
+        notifications={notifications}
+        addNotification={addNotification}
+        switchTheme={switchTheme}
+        toggleVoiceNavigation={toggleVoiceNavigation}
+        handleMicrophoneClick={handleMicrophoneClick}
+        handleReactClick={handleReactClick}
+        handleBrainClick={handleBrainClick}
+        handleCrystalClick={handleCrystalClick}
+      />
     </SupabaseProvider>
   )
 }
